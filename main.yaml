@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: ensure vim is at the latest version
+      apt:
+       name: vim
+       state: present
+      notify:
+      - restart
