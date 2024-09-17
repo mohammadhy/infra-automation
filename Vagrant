@@ -14,9 +14,8 @@ Vagrant.configure("2") do |config|
   end
 
 
-  config.vm.provision "ansible_local" do |ansible|
-    ansible.playbook = "/home/user/Desktop/main.yaml"
-    ansible.install_mode = "pip"
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "<Enter Path Ansible>"
   end
 
 end
