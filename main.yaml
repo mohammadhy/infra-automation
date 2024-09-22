@@ -1,10 +1,27 @@
----
 - hosts: all
+  name: Install Requirments All Node
   become: yes
   tasks:
     - name: ensure vim is at the latest version
       apt:
        name: vim
        state: present
-      notify:
-      - restart
+
+
+- hosts: group1
+  name: Install On Group1
+  become: yes
+  tasks:
+    - name: ensure ncdu is at the latest version
+      apt:
+       name: bind9-utils
+       state: present
+
+- hosts: group2
+  name: install On Group2
+  become: yes
+  tasks:
+    - name: ensure net-tools is at the latest version
+      apt:
+       name: net-tools
+       state: present
