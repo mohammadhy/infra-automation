@@ -1,0 +1,19 @@
+## Nexus Variable
+nexus_image: "sonatype/nexus3"
+nexus_tag: "latest"
+nexus_container_name: "nexus"
+nexus_port: 
+  - "8081:8081"
+  - "5000:5000"
+nexus_volumes:
+  - "/home/hassan/nexus-data:/sonatype-work"
+
+## Sonarqube Variable
+sonar_image: "sonarqube"
+sonar_tag: "10.7.0-community"
+sonar_container_name: "sonarqube"
+sonar_port: 
+  - "9000:9000"
+sonar_volumes:
+  - "/home/hassan/sonar-data:/opt/sonarqube/data"
+  - "/home/hassan/sonar-extention:/opt/sonarqube/extensions"

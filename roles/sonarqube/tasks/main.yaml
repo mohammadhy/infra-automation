@@ -1,0 +1,14 @@
+---
+- name: "pull image"
+  docker_image:
+    name: "{{ sonar_image }}"
+    tag: "{{ sonar_tag }}"
+    source: pull
+
+- name: "Create {{ sonar_container_name }} "
+  docker_container:
+    name: "{{ sonar_container_name }}"
+    image: "{{ sonar_image }}:{{ sonar_tag }}"
+    detach: yes
+    ports:  "{{ sonar_port }}"
+    volumes: "{{ sonar_volumes }}"

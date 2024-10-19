@@ -1,0 +1,6 @@
+- hosts: localhost
+  name: Install Requirments All Node
+  become: yes
+  roles:
+  - role: nexus
+  - role: sonarqube
