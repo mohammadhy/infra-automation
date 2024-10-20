@@ -2,5 +2,7 @@
   name: Install Requirments All Node
   become: yes
   roles:
-  - role: nexus
-  - role: sonarqube
+          #  - role: nexus
+          #  - role: sonarqube
+  - role: docker
+  - role: jenkins

@@ -11,5 +11,5 @@
     image: "{{ jenkins_image }}:{{ jenkins_tag }}"
     detach: yes
     ports:  "{{ jenkins_port }}"
-    environment: "{{ jenkins_environment }}"
+    env: "{{ jenkins_environment }}"
     volumes: "{{ jenkins_volumes }}"
