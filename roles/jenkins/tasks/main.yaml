@@ -1,0 +1,15 @@
+---
+- name: "pull image"
+  docker_image:
+    name: "{{ jenkins_image }}"
+    tag: "{{ jenkins_tag }}"
+    source: pull
+
+- name: "Create {{ jenkins_container_name }} "
+  docker_container:
+    name: "{{ jenkins_container_name }}"
+    image: "{{ jenkins_image }}:{{ jenkins_tag }}"
+    detach: yes
+    ports:  "{{ jenkins_port }}"
+    environment: "{{ jenkins_environment }}"
+    volumes: "{{ jenkins_volumes }}"

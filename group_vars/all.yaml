@@ -8,6 +8,7 @@ nexus_port:
 nexus_volumes:
   - "/home/hassan/nexus-data:/sonatype-work"
 
+
 ## Sonarqube Variable
 sonar_image: "sonarqube"
 sonar_tag: "10.7.0-community"
@@ -17,3 +18,29 @@ sonar_port:
 sonar_volumes:
   - "/home/hassan/sonar-data:/opt/sonarqube/data"
   - "/home/hassan/sonar-extention:/opt/sonarqube/extensions"
+
+
+## Docker Variable
+docker_image: "docker"
+docker_tag: "dind"
+docker_container_name: "docker"
+docker_volumes:
+  - "/home/hassan/docker_data:/var/lib/docker"
+  - "/home/hassan/docker_certs:/certs"
+  - "/home/hassa/docker_certs_client:/certs/client"
+  - "/home/hassan/jenkins_data:/var/jenkins_home"
+
+
+## Jenkins Variable 
+jenkins_image: "jenkins"
+jenkins_tag: "0.0.1"
+jenkins_container_name: "jenkins"
+jenkins_port:
+  - "8080:8080"
+jenkins_environment:
+  - "DOCKER_HOST=tcp://{{ docker_container_name }}"
+  - "DOCKER_TLS_VERIFY=1"
+  - "TZ=Asia/Tehran"
+jenkins_volumes:
+  - "/home/hassa/docker_certs_client:/var/jenkins_home/.docker"
+  - "/home/hassan/jenkins_data:/var/jenkins_home"

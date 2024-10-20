@@ -1,0 +1,16 @@
+---
+- name: "pull image"
+  docker_image:
+    name: "{{ docker_image }}"
+    tag: "{{ docker_tag }}"
+    source: pull
+
+- name: "Create {{ docker_container_name }} "
+  docker_container:
+    name: "{{ docker_container_name }}"
+    image: "{{ docker_image }}:{{ docker_tag }}"
+    privileged: true
+    detach: yes
+    ports:  "{{ docker_port }}"
+    volumes: "{{ docker_volumes }}"
+    command: ["--insecure-registry", "{{ nesus_ip_address }}"]
