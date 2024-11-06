@@ -40,17 +40,13 @@
 - hosts: group1
   name: Install On Group1
   become: yes
-  tasks:
-    - name: ensure ncdu is at the latest version
-      apt:
-       name: bind9-utils
-       state: present
+  roles: 
+  - role: docker
+  - role: jenkins
 
 - hosts: group2
   name: install On Group2
   become: yes
-  tasks:
-    - name: ensure net-tools is at the latest version
-      apt:
-       name: net-tools
-       state: present
+  roles:
+  - role: sonarqube
+  - role: nexus
