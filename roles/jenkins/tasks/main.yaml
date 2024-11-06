@@ -13,3 +13,4 @@
     ports:  "{{ jenkins_port }}"
     env: "{{ jenkins_environment }}"
     volumes: "{{ jenkins_volumes }}"
+    links: "{{ docker_container_name }}"
