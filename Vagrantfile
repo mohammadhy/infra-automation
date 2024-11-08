@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
       end
 
       node.vm.provision "ansible" do |ansible|
-        ansible.playbook = "/opt/infra-automation/main.yaml"
+        ansible.playbook = "./main.yaml"
         ansible.groups = {
           "group1" => ["server-1"],
           "group2" => ["server-2"]}
