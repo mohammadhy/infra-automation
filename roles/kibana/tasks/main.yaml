@@ -1,0 +1,15 @@
+---
+- name: "pull image {{ kibana_container_name }} "
+  docker_image:
+    name: "{{ kibana_image }}"
+    tag: "{{ kibana_tag }}"
+    source: pull
+
+- name: "Create {{ kibana_container_name }} "
+  docker_container:
+    name: "{{ kibana_container_name }}"
+    image: "{{ kibana_image }}:{{ kibana_tag }}"
+    detach: yes
+    ports:  "{{ kibana_port }}"
+    env: "{{ kibana_environment }}"
+    links: "{{ elastic_container_name }}"

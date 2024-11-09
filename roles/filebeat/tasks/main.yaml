@@ -1,0 +1,19 @@
+---
+- name: "Render configuration file from template"
+  template:
+    src: "../files/filebeat.yaml.j2"
+    dest: "{{ volume_file_path }}"
+    mode: '0644'
+
+- name: "pull image"
+  docker_image:
+    name: "{{ filebeat_image }}"
+    tag: "{{ filebeat_tag }}"
+    source: pull
+
+- name: "Create {{ filebeat_container_name }} "
+  docker_container:
+    name: "{{ filebeat_container_name }}"
+    image: "{{ filebeat_image }}:{{ filebeat_tag }}"
+    detach: yes
+    volumes: "{{ filebeat_volumes }}"

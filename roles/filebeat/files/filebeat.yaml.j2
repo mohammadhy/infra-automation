@@ -1,0 +1,7 @@
+filebeat.inputs:
+- type: {{ filebeat_config.type }}
+  paths: 
+    - {{ filebeat_config.path }}
+
+output.elasticsearch:
+  hosts: {{ filebeat_config.elastic_url }}

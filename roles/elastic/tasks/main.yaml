@@ -1,0 +1,15 @@
+---
+- name: "pull image {{ elastic_container_name }} "
+  docker_image:
+    name: "{{ elastic_image }}"
+    tag: "{{ elastic_tag }}"
+    source: pull
+
+- name: "Create {{ elastic_container_name }} "
+  docker_container:
+    name: "{{ elastic_container_name }}"
+    image: "{{ elastic_image }}:{{ elastic_tag }}"
+    detach: yes
+    ports:  "{{ elastic_port }}"
+    env: "{{ elastic_environment }}"
+    volumes: "{{ elastic_volumes }}"
