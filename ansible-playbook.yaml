@@ -2,9 +2,10 @@
   name: Install Requirments All Node
   become: yes
   roles:
-  - role: elastic
-  - role: kibana
-  - role: requirment
+  - role: filebeat
+    #- role: elastic
+    #- role: kibana
+
           #  - roke: filebeat
           #  - role: nexus
           #  - role: sonarqube

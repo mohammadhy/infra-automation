@@ -5,3 +5,9 @@ filebeat.inputs:
 
 output.elasticsearch:
   hosts: {{ filebeat_config.elastic_url }}
+  username: {{ filebeat_config.elastic_username }}
+  password: {{ filebeat_config.elastic_password }}
+processors:
+  - add_docker_metadata:
+      host: "unix:///var/run/docker.sock"
+  - add_host_metadata: ~

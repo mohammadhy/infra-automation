@@ -1,5 +1,4 @@
-handlers:
-  - name: Restart Docker
-    ansible.builtin.systemd:
-      name: docker
-      state: restarted
+- name: Restart Docker
+  ansible.builtin.systemd:
+    name: docker
+    state: restarted

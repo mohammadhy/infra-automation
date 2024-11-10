@@ -17,3 +17,4 @@
     image: "{{ filebeat_image }}:{{ filebeat_tag }}"
     detach: yes
     volumes: "{{ filebeat_volumes }}"
+    command: ["filebeat", "-e"]
