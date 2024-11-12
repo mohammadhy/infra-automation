@@ -17,4 +17,5 @@
     image: "{{ filebeat_image }}:{{ filebeat_tag }}"
     detach: yes
     volumes: "{{ filebeat_volumes }}"
-    command: ["filebeat", "-e"]
+    user: root
+    command: ["filebeat", "-e", "--path.data=/home/data"]
