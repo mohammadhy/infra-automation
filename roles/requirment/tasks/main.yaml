@@ -42,3 +42,15 @@
           }
         mode: '0644'
       notify: Restart Docker
+
+    - name: Create Docker volume directory
+      ansible.builtin.file:
+      path: "{{ GLOBAL_VOLUME_PATH }}"
+      state: directory
+      owner: '{{ GLOBAL_USERSYS }}'
+      group: '{{ GLOBAL_GROUPSYS }}'
+      mode: '0755'
+
+    - name: Set permissions for Docker volume
+      ansible.builtin.command:
+      cmd: chown -R {{ GLOBAL_USERSYS }}:{{ GLOBAL_GROUPSYS }} {{ GLOBAL_VOLUME_PATH }}

@@ -1,4 +1,10 @@
+### Global Configuration
 nesus_ip_address: "192.168.1.104:5000"
+GLOBAL_USERSYS: 'user'
+GLOBAL_GROUPSYS: 'user'
+GLOBAL_VOLUME_PATH: '/home/hassan'
+
+
 ## Nexus Variable
 nexus_image: "sonatype/nexus3"
 nexus_tag: "latest"
@@ -45,8 +51,8 @@ jenkins_volumes:
   - "/home/hassan/jenkins_data:/var/jenkins_home:rw"
 
 ## Elasticseach Variable
-elastic_image: "elasticsearch"
-elastic_tag: "7.9.0"
+elastic_image: "docker.arvancloud.ir/elasticsearch"
+elastic_tag: "7.16.3"
 elastic_container_name: "elasticsearch"
 elastic_port:
   - "9200:9200"
@@ -60,31 +66,35 @@ elastic_environment:
    ES_JAVA_OPTS="-Xms512m -Xmx512m"
 
 elastic_volumes:
-  - "/home/hasan/elasticsearch_data:/usr/share/elasticsearch/data"
+  - "/home/user/elasticsearch_data:/usr/share/elasticsearch/data"
 
 ## Kibana Variable
-kibana_image: "kibana"
-kibana_tag: "7.9.0"
+kibana_image: "docker.arvancloud.ir/kibana"
+kibana_tag: "7.16.3"
 kibana_container_name: "kibana"
 kibana_port:
   - "5601:5601"
 kibana_environment: 
-  ELASTICSEARCH_HOSTS="http://elasticsearch:9200"
+  ELASTICSEARCH_URL="http://elasticsearch:9200"
   ELASTICSEARCH_USERNAME="elastic"
   ELASTICSEARCH_PASSWORD="asus1650"
+  xpack.security.user=elastic
 
 ## Filebeat Config
-volume_file_path: "filebeat.yaml"
+volume_file_path: "./filebeat.yaml"
 filebeat_config:
-  type: container
+  type: log
   path: '/var/lib/docker/containers/*/*.log'
-  elastic_url: "http://<ip>"
+  elastic_url: "http://192.168.4.215:9200"
+  elastic_username: "elastic"
+  elastic_password: "asus1650"
 
 
 ## Filebeat Variable
-filebeat_image: "elastic/filebeat"
-filebeat_tag: "7.14.0"
+filebeat_image: "docker.arvancloud.ir/elastic/filebeat"
+filebeat_tag: "7.16.3"
 filebeat_container_name: "filebeat"
 filebeat_volumes:
   - "/var/lib/docker/containers:/var/lib/docker/containers"
   - "{{ volume_file_path }}:/usr/share/filebeat/filebeat.yml"
+  - "/var/run/docker.sock:/var/run/docker.sock"
