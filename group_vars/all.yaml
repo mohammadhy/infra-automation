@@ -3,7 +3,8 @@ nesus_ip_address: "192.168.1.104:5000"
 GLOBAL_USERSYS: 'user'
 GLOBAL_GROUPSYS: 'user'
 GLOBAL_VOLUME_PATH: '/home/hassan'
-
+DEFAULT_MEMORY_LIMIT: "2g"
+DEFAULR_CPU_LIMIT: "1.0"
 
 ## Nexus Variable
 nexus_image: "sonatype/nexus3"
@@ -98,3 +99,5 @@ filebeat_volumes:
   - "/var/lib/docker/containers:/var/lib/docker/containers"
   - "{{ volume_file_path }}:/usr/share/filebeat/filebeat.yml"
   - "/var/run/docker.sock:/var/run/docker.sock"
+filebeat_cpu: "0.5"
+filebeat_memory: "1g"

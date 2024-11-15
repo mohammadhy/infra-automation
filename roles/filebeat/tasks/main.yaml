@@ -19,3 +19,5 @@
     user: root
     volumes: "{{ filebeat_volumes }}"
     command: ["filebeat", "-e", "--path.data=/home/data"]
+    cpus: "{{ filebeat_cpu | default(DEFAULT_CPU_LIMIT) }}"
+    memory: "{{ filebeat_memory | default(DEFAULT_MEMOEY_LIMIT) }}"
