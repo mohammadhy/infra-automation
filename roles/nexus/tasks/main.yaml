@@ -12,3 +12,7 @@
     detach: yes
     ports:  "{{ nexus_port }}"
     volumes: "{{ nexus_volumes }}"
+    restart_policy: "on-failure"
+    state: "{{ nexus_state | default(DEFAULT_NEXUS_STATE) }}"
+    cpus: "{{ nesus_cpu | default(DEFAULT_CPU_LIMIT) }}"
+    memory: "{{ nesus_memory | default(DEFAULT_MEMOEY_LIMIT) }}"

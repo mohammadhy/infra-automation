@@ -12,4 +12,8 @@
     detach: yes
     ports:  "{{ kibana_port }}"
     env: "{{ kibana_environment }}"
+    restart_policy: "on-failure"
+    state: "{{ kibana_state | default(DEFAULT_KIBANA_STATE) }}"
     links: "{{ elastic_container_name }}"
+    cpus: "{{ kibana_cpu | default(DEFAULT_CPU_LIMIT) }}"
+    memory: "{{ kibana_memory | default(DEFAULT_MEMOEY_LIMIT) }}"

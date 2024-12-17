@@ -17,6 +17,8 @@
     image: "{{ filebeat_image }}:{{ filebeat_tag }}"
     detach: yes
     user: root
+    restart_policy: "on-failure"
+    state: "{{ filebeat_state | default(DEFAULT_FILEBEAT_STATE) }}"
     volumes: "{{ filebeat_volumes }}"
     command: ["filebeat", "-e", "--path.data=/home/data"]
     cpus: "{{ filebeat_cpu | default(DEFAULT_CPU_LIMIT) }}"

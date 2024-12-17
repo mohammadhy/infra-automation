@@ -11,5 +11,9 @@
     image: "{{ docker_image }}:{{ docker_tag }}"
     privileged: true
     detach: yes
+    restart_policy: "on-failure"
     volumes: "{{ docker_volumes }}"
+    state: "{{ docker_state | default(DEFAULT_DOCKER_STATE) }}"
     command: ["--insecure-registry", "{{ nesus_ip_address }}"]
+    cpus: "{{ docker_cpu | default(DEFAULT_CPU_LIMIT) }}"
+    memory: "{{ docker_memory | default(DEFAULT_MEMOEY_LIMIT) }}"

@@ -12,4 +12,8 @@
     detach: yes
     ports:  "{{ elastic_port }}"
     env: "{{ elastic_environment }}"
+    restart_policy: "on-failure"
+    state: "{{ elastic_state | default(DEFAULT_ELASTIC_STATE) }}"
     volumes: "{{ elastic_volumes }}"
+    cpus: "{{ elastic_cpu | default(DEFAULT_CPU_LIMIT) }}"
+    memory: "{{ elastic_memory | default(DEFAULT_MEMOEY_LIMIT) }}"

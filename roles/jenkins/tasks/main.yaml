@@ -12,5 +12,9 @@
     detach: yes
     ports:  "{{ jenkins_port }}"
     env: "{{ jenkins_environment }}"
+    restart_policy: "on-failure"
+    state: "{{ jenkins_state | default(DEFAULT_JENKINS_STATE) }}"
     volumes: "{{ jenkins_volumes }}"
     links: "{{ docker_container_name }}"
+    cpus: "{{ jenkins_cpu | default(DEFAULT_CPU_LIMIT) }}"
+    memory: "{{ jenkins_memory | default(DEFAULT_MEMOEY_LIMIT) }}"

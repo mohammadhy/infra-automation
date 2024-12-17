@@ -38,7 +38,11 @@
         dest: /etc/docker/daemon.json
         content: |
           {
-            "live-restore": true
+            "live-restore": true,
+              "log-driver": "json-file",
+              "log-opts": {
+                "max-size": "10m",
+                "max-file": "3",
           }
         mode: '0644'
       notify: Restart Docker

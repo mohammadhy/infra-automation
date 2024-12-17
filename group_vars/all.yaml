@@ -3,8 +3,7 @@ nesus_ip_address: "192.168.1.104:5000"
 GLOBAL_USERSYS: 'user'
 GLOBAL_GROUPSYS: 'user'
 GLOBAL_VOLUME_PATH: '/home/hassan'
-DEFAULT_MEMORY_LIMIT: "2g"
-DEFAULR_CPU_LIMIT: "1.0"
+
 
 ## Nexus Variable
 nexus_image: "sonatype/nexus3"
@@ -15,6 +14,7 @@ nexus_port:
   - "5000:5000"
 nexus_volumes:
   - "/home/hassan/nexus-data:/sonatype-work"
+nexus_state: "started"
 
 
 ## Sonarqube Variable
@@ -26,6 +26,7 @@ sonar_port:
 sonar_volumes:
   - "/home/hassan/sonar-data:/opt/sonarqube/data"
   - "/home/hassan/sonar-extention:/opt/sonarqube/extensions"
+sonar_state: "started"
 
 
 ## Docker Variable
@@ -36,6 +37,7 @@ docker_volumes:
   - "/home/hassan/docker_data:/var/lib/docker"
   - "/home/hassan/docker_certs:/certs"
   - "/home/hassan/docker_certs_client:/certs/client"
+docker_state: "started"
 
 
 ## Jenkins Variable 
@@ -50,6 +52,7 @@ jenkins_environment:
 jenkins_volumes:
   - "/home/hassan/docker_certs_client:/var/jenkins_home/.docker"
   - "/home/hassan/jenkins_data:/var/jenkins_home:rw"
+jenkins_state: "started"
 
 ## Elasticseach Variable
 elastic_image: "docker.arvancloud.ir/elasticsearch"
@@ -68,6 +71,8 @@ elastic_environment:
 
 elastic_volumes:
   - "/home/user/elasticsearch_data:/usr/share/elasticsearch/data"
+elastic_state: "started"
+
 
 ## Kibana Variable
 kibana_image: "docker.arvancloud.ir/kibana"
@@ -80,6 +85,8 @@ kibana_environment:
   ELASTICSEARCH_USERNAME="elastic"
   ELASTICSEARCH_PASSWORD="asus1650"
   xpack.security.user=elastic
+kibana_state: "started"
+
 
 ## Filebeat Config
 volume_file_path: "./filebeat.yaml"
@@ -101,3 +108,4 @@ filebeat_volumes:
   - "/var/run/docker.sock:/var/run/docker.sock"
 filebeat_cpu: "0.5"
 filebeat_memory: "1g"
+filebeat_state: "started"

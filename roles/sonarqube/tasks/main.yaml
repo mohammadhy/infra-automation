@@ -12,3 +12,7 @@
     detach: yes
     ports:  "{{ sonar_port }}"
     volumes: "{{ sonar_volumes }}"
+    restart_policy: "on-failure"
+    state: "{{ sonar_state | default(DEFAULT_SONAR_STATE) }}"
+    cpus: "{{ sonar_cpu | default(DEFAULT_CPU_LIMIT) }}"
+    memory: "{{ sonar_memory | default(DEFAULT_MEMOEY_LIMIT) }}"
