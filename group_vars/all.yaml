@@ -1,8 +1,8 @@
 ### Global Configuration
-nesus_ip_address: "192.168.1.104:5000"
+nesus_ip_address: "192.168.4.196:5000"
 GLOBAL_USERSYS: 'user'
 GLOBAL_GROUPSYS: 'user'
-GLOBAL_VOLUME_PATH: '/home/hassan'
+GLOBAL_VOLUME_PATH: '/home/user'
 
 
 ## Nexus Variable
@@ -13,7 +13,7 @@ nexus_port:
   - "8081:8081"
   - "5000:5000"
 nexus_volumes:
-  - "/home/hassan/nexus-data:/sonatype-work"
+  - "/home/user/nexus-data:/nexus-data"
 nexus_state: "started"
 
 
@@ -24,8 +24,8 @@ sonar_container_name: "sonarqube"
 sonar_port: 
   - "9000:9000"
 sonar_volumes:
-  - "/home/hassan/sonar-data:/opt/sonarqube/data"
-  - "/home/hassan/sonar-extention:/opt/sonarqube/extensions"
+  - "/home/user/sonar-data:/opt/sonarqube/data"
+  - "/home/user/sonar-extention:/opt/sonarqube/extensions"
 sonar_state: "started"
 
 
@@ -34,15 +34,15 @@ docker_image: "docker"
 docker_tag: "dind"
 docker_container_name: "docker"
 docker_volumes:
-  - "/home/hassan/docker_data:/var/lib/docker"
-  - "/home/hassan/docker_certs:/certs"
-  - "/home/hassan/docker_certs_client:/certs/client"
-docker_state: "started"
+  - "/home/user/docker_data:/var/lib/docker"
+  - "/home/user/docker_certs:/certs"
+  - "/home/user/docker_certs_client:/certs/client"
+docker_state: "absent"
 
 
 ## Jenkins Variable 
-jenkins_image: "jenkins/jenkins"
-jenkins_tag: "2.481"
+jenkins_image: "asusvivobook/jenkins"
+jenkins_tag: "0.0.1"
 jenkins_container_name: "jenkins"
 jenkins_port:
   - "8080:8080"
@@ -50,9 +50,9 @@ jenkins_environment:
    DOCKER_HOST="tcp://docker:2376"
    DOCKER_TLS_VERIFY="1"
 jenkins_volumes:
-  - "/home/hassan/docker_certs_client:/var/jenkins_home/.docker"
-  - "/home/hassan/jenkins_data:/var/jenkins_home:rw"
-jenkins_state: "started"
+  - "/home/user/docker_certs_client:/var/jenkins_home/.docker"
+  - "/home/user/jenkins_data:/var/jenkins_home:rw"
+jenkins_state: "absent"
 
 ## Elasticseach Variable
 elastic_image: "docker.arvancloud.ir/elasticsearch"
@@ -81,7 +81,7 @@ kibana_container_name: "kibana"
 kibana_port:
   - "5601:5601"
 kibana_environment: 
-  ELASTICSEARCH_URL="http://elasticsearch:9200"
+  ELASTICSEARCH_URL="http://192.168.4.198:9200"
   ELASTICSEARCH_USERNAME="elastic"
   ELASTICSEARCH_PASSWORD="asus1650"
   xpack.security.user=elastic
@@ -93,7 +93,7 @@ volume_file_path: "./filebeat.yaml"
 filebeat_config:
   type: log
   path: '/var/lib/docker/containers/*/*.log'
-  elastic_url: "http://192.168.4.215:9200"
+  elastic_url: "http://192.168.4.198:9200"
   elastic_username: "elastic"
   elastic_password: "asus1650"
 
@@ -109,3 +109,19 @@ filebeat_volumes:
 filebeat_cpu: "0.5"
 filebeat_memory: "1g"
 filebeat_state: "started"
+
+
+## Logstash Variable
+logstash_image: "docker.arvancloud.ir/elastic/logstash"
+logstash_tag: "7.16.3"
+logstash_container_name: "logstash"
+logstash_port:
+  - "5044:5044"
+  - "5045:5045/udp"
+logstash_volumes:
+  - "./pipelines.yaml:/usr/share/logstash/config/logstash.yml"
+logstash_environment:
+  LS_JAVA_OPTS: "-Xmx2g -Xms2g"
+logstash_cpu: "0.5"
+logstash_memory: "1g"
+logstash_state: "started"

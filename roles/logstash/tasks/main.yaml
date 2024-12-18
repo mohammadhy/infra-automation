@@ -1,0 +1,25 @@
+---
+- name: "Render configuration file from template"
+  copy:
+    src: "pipelines.yaml"
+    dest: /home/user
+    mode: '0644'
+
+- name: "pull image"
+  docker_image:
+    name: "{{ logstash_image }}"
+    tag: "{{ logstash_tag }}"
+    source: pull
+
+- name: "Create {{ logstash_container_name }} "
+  docker_container:
+    name: "{{ logstash_container_name }}"
+    image: "{{ logstash_image }}:{{ logstash_tag }}"
+    detach: yes
+    restart_policy: "on-failure"
+    env: "{{ logstash_environment }}"
+    ports: "{{ logstash_port }}"
+    state: "{{ logstash_state | default(DEFAULT_LOGSTASH_STATE) }}"
+    volumes: "{{ logstash_volumes }}"
+    cpus: "{{ logstash_cpu | default(DEFAULT_CPU_LIMIT) }}"
+    memory: "{{ logstash_memory | default(DEFAULT_MEMOEY_LIMIT) }}"

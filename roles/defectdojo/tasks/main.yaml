@@ -1,0 +1,24 @@
+- name: Check Install DefectDojo
+  stat:
+    path: /opt/django-DefectDojo
+  register: exist_dir
+
+
+- name: Set permissions for /opt
+  command: chown -R '{{ GLOBAL_USERSYS }}':'{{ GLOBAL_GROUPSYS }}' /opt
+
+- name: Clone the repository
+  shell: cd /opt && git clone 'https://github.com/DefectDojo/django-DefectDojo.git'
+  when: not exist_dir.exists
+
+- name: Image Create DefectDojo
+  command: ./dc-build.sh
+  args:
+    chdir: /opt/django-DefectDojo
+  when: not exist_dir.exists
+
+- name: Docker Compose Up 
+  command: ./dc-up-d.sh postgres-redis
+  args:
+    chdir: /opt/django-DefectDojo 
+  when: not exist_dir.exists
