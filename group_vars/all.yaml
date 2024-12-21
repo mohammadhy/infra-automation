@@ -118,6 +118,7 @@ logstash_container_name: "logstash"
 logstash_port:
   - "5044:5044"
   - "5045:5045/udp"
+  - "514:514/udp"
 logstash_volumes:
   - "./pipelines.yaml:/usr/share/logstash/pipeline/logstash.conf"
 logstash_environment:
