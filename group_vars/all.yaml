@@ -118,8 +118,9 @@ logstash_container_name: "logstash"
 logstash_port:
   - "5044:5044"
   - "5045:5045/udp"
+  - "514:514/udp"
 logstash_volumes:
-  - "./pipelines.yaml:/usr/share/logstash/config/logstash.yml"
+  - "./pipelines.yaml:/usr/share/logstash/pipeline/logstash.conf"
 logstash_environment:
   LS_JAVA_OPTS: "-Xmx2g -Xms2g"
 logstash_cpu: "0.5"

@@ -3,23 +3,47 @@ input {
     type => "beats"
     port => 5044
   }
+
+  syslog {
+    port => 514
+    type => "syslog"
+  }
 }
 
 filter {
-  grok {
-    match => { 
-      "message" => '%{IPORHOST:host_name} - - \[%{HTTPDATE:access_time}\] "%{WORD:http_method} %{DATA:url} HTTP/%{NUMBER:http_version}" %{NUMBER:response_code} %{NUMBER:body_sent_byte} "-" "%{DATA:referrer}" "-"'
+  if [type] == "beats" {
+    grok {
+      match => {
+        "message" => '%{IPORHOST:host_name} - - \[%{HTTPDATE:access_time}\] "%{WORD:http_method} %{DATA:url} HTTP/%{NUMBER:http_version}" %{NUMBER:response_code} %{NUMBER:body_sent_byte} "-" "%{DATA:referrer}" "-"'
+      }
+      remove_field => ["message"]
     }
-    remove_field => ["message"]
+  } else if [type] == "syslog" {
+    grok {
+      match => {
+        "message" => '%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_host} %{DATA:program}(\[%{POSINT:pid}\])?: %{GREEDYDATA:syslog_message}'
+      }
+      remove_field => ["message"]
+    }
   }
 }
 
 output {
-  elasticsearch {
-    hosts => ["http://192.168.4.198:9200"]
-    ssl_certificate_verification => false
-    user => "elastic"
-    password => "asus1650"
-    index => "filebeat-docker-%{+YYYY.MM.dd}"
+  if [type] == "beats" {
+    elasticsearch {
+      hosts => ["http://192.168.4.198:9200"]
+      ssl_certificate_verification => false
+      user => "elastic"
+      password => "asus1650"
+      index => "filebeat-docker-%{+YYYY.MM.dd}"
+    }
+  } else if [type] == "syslog" {
+    elasticsearch {
+      hosts => ["http://192.168.4.198:9200"]
+      ssl_certificate_verification => false
+      user => "elastic"
+      password => "asus1650"
+      index => "syslog-%{+YYYY.MM.dd}"
+    }
   }
 }
