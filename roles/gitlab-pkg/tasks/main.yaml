@@ -1,0 +1,21 @@
+---
+    - name: Ensure Necessary Dependencies Installed.
+      apt:
+       pkg: 
+         - perl
+         - tzdata 
+         - vim
+         - net-tools
+         - openssh-server
+         - ca-certificates
+         - curl 
+       state: present
+       update_cache: true
+
+    - name: Add the GitLab Package Repository
+      shell: curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
+      become: true
+      
+    - name: Installing Gitlab With Address {{ GITLAB_URL }}
+      shell: EXTERNAL_URL={{ GITLAB_URL }} apt-get install gitlab-ee=16.9.0    }
+    }
