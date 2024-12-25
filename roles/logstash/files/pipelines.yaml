@@ -21,7 +21,7 @@ filter {
   } else if [type] == "syslog" {
     grok {
       match => {
-        "message" => '%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_host} %{DATA:program}(\[%{POSINT:pid}\])?: %{GREEDYDATA:syslog_message}'
+        "message" => '%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_host} %{DATA:program}(\[%{POSINT:pid}\])?: %{GREEDYDATA:syslog_message}''
       }
       remove_field => ["message"]
     }

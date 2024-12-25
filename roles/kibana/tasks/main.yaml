@@ -1,19 +1,17 @@
 ---
-- name: "pull image {{ kibana_container_name }} "
-  docker_image:
-    name: "{{ kibana_image }}"
-    tag: "{{ kibana_tag }}"
-    source: pull
 
-- name: "Create {{ kibana_container_name }} "
-  docker_container:
-    name: "{{ kibana_container_name }}"
-    image: "{{ kibana_image }}:{{ kibana_tag }}"
-    detach: yes
-    ports:  "{{ kibana_port }}"
-    env: "{{ kibana_environment }}"
-    restart_policy: "on-failure"
-    state: "{{ kibana_state | default(DEFAULT_KIBANA_STATE) }}"
-    links: "{{ elastic_container_name }}"
-    cpus: "{{ kibana_cpu | default(DEFAULT_CPU_LIMIT) }}"
-    memory: "{{ kibana_memory | default(DEFAULT_MEMOEY_LIMIT) }}"
+- name: Ensure Directory Exists
+  file:
+    path: /opt/{{ kibana_container_name }}
+    state: directory
+    mode: '0755'
+
+- name: Generate docker-compose.yaml from template
+  template:
+    src: "docker-compose.yaml.j2"
+    dest: "/opt/kibana/docker-compose.yaml"
+
+- name: Run Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "/opt/{{ kibana_container_name }}"
+    state: present

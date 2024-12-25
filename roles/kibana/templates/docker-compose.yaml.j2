@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  {{ kibana_container_name }}:
+    image: "{{ kibana_image }}:{{ kibana_tag }}"
+    ports:
+{% for port in kibana_port %}
+    - {{ port }}
+{% endfor %}
+    environment:
+{% for key, value in kibana_environment.items() %}
+     {{ key }}: {{ value }}
+{% endfor %}
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "{{ kibana_cpu | default(default_kibana_cpu) }}"
+          memory: "{{ kibana_memory | default(default_kibana_memory) }}"
+    networks:
+      - shared_network
+networks:
+  shared_network:
+    external: true

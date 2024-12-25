@@ -1,0 +1,5 @@
+- name: Create shared Docker network
+  community.docker.docker_network:
+    name: shared_network
+    state: present
+    driver: bridge

@@ -18,3 +18,7 @@
     links: "{{ docker_container_name }}"
     cpus: "{{ jenkins_cpu | default(DEFAULT_CPU_LIMIT) }}"
     memory: "{{ jenkins_memory | default(DEFAULT_MEMOEY_LIMIT) }}"
+
+- name: Set permissions for Docker volume
+  command: chown -R '{{ GLOBAL_USERSYS }}':'{{ GLOBAL_GROUPSYS }}' '{{ item }}'
+  loop: "{{ jenkins_volumes | map('regex_replace', '^(.*):.*$', '\\1') | list }}"

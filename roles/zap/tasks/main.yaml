@@ -1,0 +1,14 @@
+---
+- name: Add Repositor 
+  shell: echo 'deb http://download.opensuse.org/repositories/home:/cabelo/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/home:cabelo.list
+  become: true
+
+- name: Add Gpg Key
+  shell: curl -fsSL https://download.opensuse.org/repositories/home:cabelo/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_cabelo.gpg > /dev/null
+  become: true
+
+- name: Install 
+  apt:
+    name: zap
+    state: present
+    update_cache: true

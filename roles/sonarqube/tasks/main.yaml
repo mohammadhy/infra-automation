@@ -1,18 +1,17 @@
 ---
-- name: "pull image"
-  docker_image:
-    name: "{{ sonar_image }}"
-    tag: "{{ sonar_tag }}"
-    source: pull
+- name: Ensure Directory Exists
+  file:
+    path: /opt/{{ sonar_container_name }}
+    state: directory
+    mode: '0755'
 
-- name: "Create {{ sonar_container_name }} "
-  docker_container:
-    name: "{{ sonar_container_name }}"
-    image: "{{ sonar_image }}:{{ sonar_tag }}"
-    detach: yes
-    ports:  "{{ sonar_port }}"
-    volumes: "{{ sonar_volumes }}"
-    restart_policy: "on-failure"
-    state: "{{ sonar_state | default(DEFAULT_SONAR_STATE) }}"
-    cpus: "{{ sonar_cpu | default(DEFAULT_CPU_LIMIT) }}"
-    memory: "{{ sonar_memory | default(DEFAULT_MEMOEY_LIMIT) }}"
+- name: Generate docker-compose.yaml from template
+  template:
+    src: "docker-compose.yaml.j2"
+    dest: "/opt/{{ sonar_container_name }}/docker-compose.yaml"
+
+
+- name: Run Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "/opt/{{ sonar_container_name }}"
+    state: present

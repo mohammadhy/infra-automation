@@ -1,0 +1,18 @@
+services:
+  {{ sonar_container_name }}:
+    image: "{{ sonar_image }}:{{ sonar_tag }}"
+    ports:
+{% for port in sonar_port %}
+    - {{ port }}
+{% endfor %}
+    volumes:
+{% for volume in sonar_volumes %}
+    - {{ volume }}
+{% endfor %}
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "{{ sonar_cpu | default(DEFAULT_CPU_LIMIT) }}"
+          memory: "{{ sonar_memory | default(DEFAULT_MEMOEY_LIMIT) }}"

@@ -1,18 +1,19 @@
----
-- name: "pull image"
-  docker_image:
-    name: "{{ nexus_image }}"
-    tag: "{{ nexus_tag }}"
-    source: pull
+- name: Ensure Directory Exists
+  file:
+    path: /opt/{{ nexus_container_name }}
+    state: directory
+    mode: '0755'
 
-- name: "Create {{ nexus_container_name }} "
-  docker_container:
-    name: "{{ nexus_container_name }}"
-    image: "{{ nexus_image }}:{{ nexus_tag }}"
-    detach: yes
-    ports:  "{{ nexus_port }}"
-    volumes: "{{ nexus_volumes }}"
-    restart_policy: "on-failure"
-    state: "{{ nexus_state | default(DEFAULT_NEXUS_STATE) }}"
-    cpus: "{{ nesus_cpu | default(DEFAULT_CPU_LIMIT) }}"
-    memory: "{{ nesus_memory | default(DEFAULT_MEMOEY_LIMIT) }}"
+- name: Generate docker-compose.yaml from template
+  template:
+    src: "docker-compose.yaml.j2"
+    dest: "/opt/nexus/docker-compose.yaml"
+
+- name: Set permissions for Docker volume
+  command: chown -R 200 '{{ item }}'
+  loop: "{{ nexus_volumes | map('regex_replace', '^(.*):.*$', '\\1') | list }}"
+
+- name: Run Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "/opt/{{ nexus_container_name }}"
+    state: present

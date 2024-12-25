@@ -1,25 +1,20 @@
----
-- name: "Render configuration file from template"
+- name: Ensure Directory Exists
+  file:
+    path: /opt/{{ logstash_container_name }}
+    state: directory
+    mode: '0755'
+
+- name: Generate docker-compose.yaml from template
+  template:
+    src: "docker-compose.yaml.j2"
+    dest: "/opt/logstash/docker-compose.yaml"
+
+- name: Ensure Directory Exists
   copy:
-    src: "pipelines.yaml"
-    dest: /home/user
-    mode: '0644'
+    src: pipelines.yaml
+    dest: /opt/logstash/pipelines.yaml
 
-- name: "pull image"
-  docker_image:
-    name: "{{ logstash_image }}"
-    tag: "{{ logstash_tag }}"
-    source: pull
-
-- name: "Create {{ logstash_container_name }} "
-  docker_container:
-    name: "{{ logstash_container_name }}"
-    image: "{{ logstash_image }}:{{ logstash_tag }}"
-    detach: yes
-    restart_policy: "on-failure"
-    env: "{{ logstash_environment }}"
-    ports: "{{ logstash_port }}"
-    state: "{{ logstash_state | default(DEFAULT_LOGSTASH_STATE) }}"
-    volumes: "{{ logstash_volumes }}"
-    cpus: "{{ logstash_cpu | default(DEFAULT_CPU_LIMIT) }}"
-    memory: "{{ logstash_memory | default(DEFAULT_MEMOEY_LIMIT) }}"
+- name: Run Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "/opt/{{ logstash_container_name }}"
+    state: present

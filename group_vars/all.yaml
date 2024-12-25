@@ -3,7 +3,7 @@ nesus_ip_address: "192.168.4.196:5000"
 GLOBAL_USERSYS: 'user'
 GLOBAL_GROUPSYS: 'user'
 GLOBAL_VOLUME_PATH: '/home/user'
-
+GITLAB_URL: '192.168.4.215'
 
 ## Nexus Variable
 nexus_image: "sonatype/nexus3"
@@ -47,8 +47,8 @@ jenkins_container_name: "jenkins"
 jenkins_port:
   - "8080:8080"
 jenkins_environment: 
-   DOCKER_HOST="tcp://docker:2376"
-   DOCKER_TLS_VERIFY="1"
+  DOCKER_HOST: "tcp://docker:2376"
+  DOCKER_TLS_VERIFY: "1"
 jenkins_volumes:
   - "/home/user/docker_certs_client:/var/jenkins_home/.docker"
   - "/home/user/jenkins_data:/var/jenkins_home:rw"
@@ -62,17 +62,17 @@ elastic_port:
   - "9200:9200"
   - "9300:9300"
 elastic_environment: 
-   cluster.name="elastic-local"
-   bootstrap.memory_lock="true"
-   discovery.type="single-node"
-   xpack.security.enabled=true
-   ELASTIC_PASSWORD="asus1650"
-   ES_JAVA_OPTS="-Xms512m -Xmx512m"
+  cluster.name: "elastic-local"
+  bootstrap.memory_lock: "true"
+  discovery.type: "single-node"
+  xpack.security.enabled: "true"
+  ELASTIC_PASSWORD: "asus1650"
+  ES_JAVA_OPTS: "-Xms512m -Xmx512m"
 
-elastic_volumes:
-  - "/home/user/elasticsearch_data:/usr/share/elasticsearch/data"
+elastic_volumes: "/home/user/elasticsearch_data"
 elastic_state: "started"
-
+default_cpu_limit_elastic: "2"
+default_memory_limit_elastic: "1g"
 
 ## Kibana Variable
 kibana_image: "docker.arvancloud.ir/kibana"
@@ -81,15 +81,15 @@ kibana_container_name: "kibana"
 kibana_port:
   - "5601:5601"
 kibana_environment: 
-  ELASTICSEARCH_URL="http://192.168.4.198:9200"
-  ELASTICSEARCH_USERNAME="elastic"
-  ELASTICSEARCH_PASSWORD="asus1650"
-  xpack.security.user=elastic
+  ELASTICSEARCH_URL: "http://192.168.4.215:9200"
+  ELASTICSEARCH_USERNAME: "elastic"
+  ELASTICSEARCH_PASSWORD: "asus1650"
+  xpack.security.user: "elastic"
 kibana_state: "started"
 
 
 ## Filebeat Config
-volume_file_path: "./filebeat.yaml"
+volume_file_path: "/opt/filebeat/filebeat.yaml"
 filebeat_config:
   type: log
   path: '/var/lib/docker/containers/*/*.log'
@@ -102,10 +102,10 @@ filebeat_config:
 filebeat_image: "docker.arvancloud.ir/elastic/filebeat"
 filebeat_tag: "7.16.3"
 filebeat_container_name: "filebeat"
-filebeat_volumes:
-  - "/var/lib/docker/containers:/var/lib/docker/containers"
-  - "{{ volume_file_path }}:/usr/share/filebeat/filebeat.yml"
-  - "/var/run/docker.sock:/var/run/docker.sock"
+  #filebeat_volumes:
+  #  - "/var/lib/docker/containers:/var/lib/docker/containers"
+  #  - "{{ volume_file_path }}:/usr/share/filebeat/filebeat.yml"
+  #  - "/var/run/docker.sock:/var/run/docker.sock"
 filebeat_cpu: "0.5"
 filebeat_memory: "1g"
 filebeat_state: "started"
@@ -126,3 +126,4 @@ logstash_environment:
 logstash_cpu: "0.5"
 logstash_memory: "1g"
 logstash_state: "started"
+logstash_server: "192.168.4.215"

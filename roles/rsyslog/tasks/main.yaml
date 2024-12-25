@@ -1,0 +1,19 @@
+- name: Ensure rsyslog is installed
+  ansible.builtin.package:
+    name: rsyslog
+    state: present
+
+
+- name: Configure rsyslog main configuration file
+  ansible.builtin.copy:
+    dest: /etc/rsyslog.d/50-default.conf
+    content: |
+      *.* @{{ logstash_server }}:514
+      auth,authpriv.*                  /var/log/auth.log
+      kern.*                          -/var/log/kern.log
+
+- name: Ensure rsyslog service is enabled and started
+  ansible.builtin.service:
+    name: rsyslog
+    enabled: yes
+    state: started

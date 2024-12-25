@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  elastic:
+    image: "{{ elastic_image }}:{{ elastic_tag }}"
+    container_name: "{{ elastic_container_name }}"
+    ports:
+{% for port in elastic_port %}
+      - "{{ port }}"
+{% endfor %}
+    environment:
+{% for key, value in elastic_environment.items() %}
+     {{ key }}: "{{ value }}"
+{% endfor %}
+    restart: "on-failure"
+    deploy:
+      resources:
+        limits:
+          cpus: "{{ elastic_cpu | default(default_cpu_limit_elastic) }}"
+          memory: "{{ elastic_memory | default(default_memory_limit_elastic) }}"
+    volumes:
+      - {{ elastic_volumes }}:/usr/share/elasticsearch/data
+    networks:
+      - shared_network
+
+networks:
+  shared_network:
+    external: true

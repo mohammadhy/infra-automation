@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  {{ nexus_container_name }}:
+    image: "{{ nexus_image }}:{{ nexus_tag }}"
+    container_name: "{{ nexus_container_name }}"
+    restart: "on-failure"
+    ports:
+{% for port in nexus_port %}
+    - "{{ port }}"
+{% endfor %}
+    volumes:
+{% for volume in nexus_volumes %}
+    - {{ volume }}
+{% endfor %}
+    deploy:
+      resources:
+        limits:
+          cpus: "{{ nexus_cpu | default(DEFAULT_CPU_LIMIT) }}"
+          memory: "{{ nexus_memory | default(DEFAULT_MEMOEY_LIMIT) }}"
+    networks:
+      - shared_network
+networks:
+  shared_network:
+    external: true

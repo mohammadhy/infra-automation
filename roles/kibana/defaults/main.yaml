@@ -1,3 +1,3 @@
-DEFAULT_CPU_LIMIT: "1"
-DEFAULT_MEMOEY_LIMIT: "2g"
+default_kibana_cpu: "1"
+default_kibana_memory: "2g"
 DEFAULT_KIBANA_STATE: "started"

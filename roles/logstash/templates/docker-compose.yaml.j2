@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  {{ logstash_container_name }}:
+    image: "{{ logstash_image }}:{{ logstash_tag }}"
+    container_name: "{{ logstash_container_name }}"
+    restart: "on-failure"
+    environment:
+{% for key, value in logstash_environment.items() %}
+      {{ key }}: "{{ value }}"
+{% endfor %}
+    ports:
+{% for port in logstash_port %}
+    - "{{ port }}"
+{% endfor %}
+    volumes:
+{% for volume in logstash_volumes %}
+    - {{ volume }}
+{% endfor %}
+    deploy:
+      resources:
+        limits:
+          cpus: "{{ logstash_cpu | default(DEFAULT_CPU_LIMIT) }}"
+          memory: "{{ logstash_memory | default(DEFAULT_MEMOEY_LIMIT) }}"
+    networks:
+      - shared_network
+networks:
+  shared_network:
+    external: true

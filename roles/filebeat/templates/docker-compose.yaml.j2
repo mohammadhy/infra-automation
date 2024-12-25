@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  filebeat:
+    image: "{{ filebeat_image }}:{{ filebeat_tag }}"
+    container_name: "{{ filebeat_container_name }}"
+    restart: "on-failure"
+    user: root
+    command:
+      - "filebeat"
+      - "-e"
+      - "--path.data=/home/data"
+    volumes:
+     - /var/lib/docker/containers:/var/lib/docker/containers
+     - /var/run/docker.sock:/var/run/docker.sock
+     - {{ volume_file_path }}:/usr/share/filebeat/filebeat.yml  
+    deploy:
+      resources:
+        limits:
+          cpus: "{{ filebeat_cpu | default(DEFAULT_CPU_LIMIT) }}"
+          memory: "{{ filebeat_memory | default(DEFAULT_MEMORY_LIMIT) }}"
+    networks:
+      - shared_network
+
+networks:
+  shared_network:
+    external: true

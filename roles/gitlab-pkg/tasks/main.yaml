@@ -17,5 +17,4 @@
       become: true
       
     - name: Installing Gitlab With Address {{ GITLAB_URL }}
-      shell: EXTERNAL_URL={{ GITLAB_URL }} apt-get install gitlab-ee=16.9.0    }
-    }
+      shell: EXTERNAL_URL={{ GITLAB_URL }} apt-get install gitlab-ee

@@ -1,19 +1,18 @@
 ---
-- name: "pull image {{ elastic_container_name }} "
-  docker_image:
-    name: "{{ elastic_image }}"
-    tag: "{{ elastic_tag }}"
-    source: pull
+- name: Ensure Directory Exists
+  file:
+    path: /opt/{{ elastic_container_name }}
+    state: directory
+    mode: '0755'
+- name: Generate docker-compose.yaml from template
+  template:
+    src: "docker-compose.yaml.j2"
+    dest: "/opt/{{ elastic_container_name }}/docker-compose.yaml"
 
-- name: "Create {{ elastic_container_name }} "
-  docker_container:
-    name: "{{ elastic_container_name }}"
-    image: "{{ elastic_image }}:{{ elastic_tag }}"
-    detach: yes
-    ports:  "{{ elastic_port }}"
-    env: "{{ elastic_environment }}"
-    restart_policy: "on-failure"
-    state: "{{ elastic_state | default(DEFAULT_ELASTIC_STATE) }}"
-    volumes: "{{ elastic_volumes }}"
-    cpus: "{{ elastic_cpu | default(DEFAULT_CPU_LIMIT) }}"
-    memory: "{{ elastic_memory | default(DEFAULT_MEMOEY_LIMIT) }}"
+- name: Set permissions for Docker volume
+  command: chown -R '{{ GLOBAL_USERSYS }}':'{{ GLOBAL_GROUPSYS }}' '{{ elastic_volumes }}'
+
+- name: Run Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "/opt/{{ elastic_container_name }}"
+    state: present

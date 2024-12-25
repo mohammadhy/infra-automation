@@ -17,3 +17,7 @@
     command: ["--insecure-registry", "{{ nesus_ip_address }}"]
     cpus: "{{ docker_cpu | default(DEFAULT_CPU_LIMIT) }}"
     memory: "{{ docker_memory | default(DEFAULT_MEMOEY_LIMIT) }}"
+
+- name: Set permissions for Docker volume
+  command: chown -R '{{ GLOBAL_USERSYS }}':'{{ GLOBAL_GROUPSYS }}' '{{ item }}'
+  loop: "{{ jenkins_volumes | map('regex_replace', '^(.*):.*$', '\\1') | list }}"

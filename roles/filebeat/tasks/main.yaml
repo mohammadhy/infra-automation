@@ -1,25 +1,30 @@
 ---
+- name: Ensure Directory Exists
+  file:
+    path: /opt/{{ filebeat_container_name }}
+    state: directory
+    mode: '0755'
+
 - name: "Render configuration file from template"
   template:
-    src: "../files/filebeat.yaml.j2"
-    dest: "{{ volume_file_path }}"
+    src: "filebeat.yaml.j2"
+    dest: "/opt/filebeat/{{ filebeat_container_name }}"
     mode: '0644'
 
-- name: "pull image"
-  docker_image:
-    name: "{{ filebeat_image }}"
-    tag: "{{ filebeat_tag }}"
-    source: pull
+- name: Generate docker-compose.yaml from template
+  template:
+    src: "docker-compose.yaml.j2"
+    dest: "/opt/filebeat/docker-compose.yaml"
 
-- name: "Create {{ filebeat_container_name }} "
-  docker_container:
-    name: "{{ filebeat_container_name }}"
-    image: "{{ filebeat_image }}:{{ filebeat_tag }}"
-    detach: yes
-    user: root
-    restart_policy: "on-failure"
-    state: "{{ filebeat_state | default(DEFAULT_FILEBEAT_STATE) }}"
-    volumes: "{{ filebeat_volumes }}"
-    command: ["filebeat", "-e", "--path.data=/home/data"]
-    cpus: "{{ filebeat_cpu | default(DEFAULT_CPU_LIMIT) }}"
-    memory: "{{ filebeat_memory | default(DEFAULT_MEMOEY_LIMIT) }}"
+- name: Set permissions for Filebeats 
+  command: chown -R root /opt/filebeat/{{ filebeat_container_name }}
+
+    #- name: Set permissions for Docker volume
+    # command: chown -R '{{ GLOBAL_USERSYS }}':'{{ GLOBAL_GROUPSYS }}' '{{ item }}'
+    #loop: "{{ filebeat_volumes | map('regex_replace', '^(.*):.*$', '\\1') | list }}"
+
+
+- name: Run Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "/opt/{{ filebeat_container_name }}"
+    state: present
