@@ -9,11 +9,11 @@
     src: "docker-compose.yaml.j2"
     dest: "/opt/nexus/docker-compose.yaml"
 
-- name: Set permissions for Docker volume
-  command: chown -R 200 '{{ item }}'
-  loop: "{{ nexus_volumes | map('regex_replace', '^(.*):.*$', '\\1') | list }}"
-
 - name: Run Docker Compose
   community.docker.docker_compose_v2:
     project_src: "/opt/{{ nexus_container_name }}"
     state: present
+
+- name: Set permissions for Docker volume
+  command: chown -R 200 '{{ item }}'
+  loop: "{{ nexus_volumes | map('regex_replace', '^(.*):.*$', '\\1') | list }}"

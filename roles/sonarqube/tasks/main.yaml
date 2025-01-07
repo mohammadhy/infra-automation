@@ -15,3 +15,7 @@
   community.docker.docker_compose_v2:
     project_src: "/opt/{{ sonar_container_name }}"
     state: present
+
+- name: Set permissions for Docker volume
+  command: chown -R 200 '{{ item }}'
+  loop: "{{ sonar_volumes | map('regex_replace', '^(.*):.*$', '\\1') | list }}"
