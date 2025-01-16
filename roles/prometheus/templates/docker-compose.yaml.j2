@@ -1,0 +1,23 @@
+services:
+  {{ prometheus_container_name }}:
+    image: "{{ prometheus_image }}:{{ prometheus_tag }}"
+    container_name: "{{ prometheus_container_name }}"
+    restart: "on-failure"
+    ports:
+{% for port in prometheus_port %}
+    - "{{ port }}"
+{% endfor %}
+    volumes:
+{% for volume in prometheus_volumes %}
+    - {{ volume }}
+{% endfor %}
+    deploy:
+      resources:
+        limits:
+          cpus: "{{ prometheus_cpu | default(DEFAULT_CPU_LIMIT) }}"
+          memory: "{{ prometheus_memory | default(DEFAULT_MEMOEY_LIMIT) }}"
+    networks:
+      - shared_network
+networks:
+  shared_network:
+    external: true

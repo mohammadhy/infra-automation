@@ -1,0 +1,23 @@
+services:
+  {{ cadvisor_container_name }}:
+    image: "{{ cadvisor_image }}:{{ cadvisor_tag }}"
+    container_name: "{{ cadvisor_container_name }}"
+    restart: "on-failure"
+    ports:
+{% for port in cadvisor_port %}
+    - "{{ port }}"
+{% endfor %}
+    volumes:
+{% for volume in cadvisor_volumes %}
+    - {{ volume }}
+{% endfor %}
+    deploy:
+      resources:
+        limits:
+          cpus: "{{ cadvisor_cpu | default(DEFAULT_CPU_LIMIT) }}"
+          memory: "{{ cadvisor_memory | default(DEFAULT_MEMOEY_LIMIT) }}"
+    networks:
+      - shared_network
+networks:
+  shared_network:
+    external: true
