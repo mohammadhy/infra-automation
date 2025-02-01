@@ -1,0 +1,21 @@
+- name: Ensure Directory Exists
+  file:
+    path: /opt/{{ prometheus_container_name }}
+    state: directory
+    mode: '0755'
+
+- name: Render configuration file from template
+  template:
+    src: "prometheus.yaml.j2"
+    dest: "/opt/{{ prometheus_container_name }}/{{ prometheus_container_name }}"
+    mode: "0644"
+
+- name: Generate docker-compose.yaml from template
+  template:
+    src: "docker-compose.yaml.j2"
+    dest: "/opt/{{ prometheus_container_name }}/docker-compose.yaml"
+
+- name: Run Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "/opt/{{ prometheus_container_name }}"
+    state: present

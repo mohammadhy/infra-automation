@@ -1,0 +1,19 @@
+services:
+  {{ grafana_container_name }}:
+    image: "{{ grafana_image }}:{{ grafana_tag }}"
+    container_name: "{{ grafana_container_name }}"
+    restart: "on-failure"
+    ports:
+{% for port in grafana_port %}
+    - "{{ port }}"
+{% endfor %}
+    deploy:
+      resources:
+        limits:
+          cpus: "{{ grafana_cpu | default(DEFAULT_CPU_LIMIT) }}"
+          memory: "{{ grafana_memory | default(DEFAULT_MEMOEY_LIMIT) }}"
+    networks:
+      - shared_network
+networks:
+  shared_network:
+    external: true

@@ -126,6 +126,7 @@ logstash_environment:
 logstash_cpu: "0.5"
 logstash_memory: "1g"
 logstash_state: "started"
+<<<<<<< HEAD
 logstash_server: "192.168.1.105"
 
 
@@ -148,3 +149,44 @@ vault_environment:
   VAULT_ADDRESS: "https://192.168.1.105:8200"
 
 VAULT_CLUSTER_ADDR: 192.168.1.105
+=======
+logstash_server: "192.168.4.215"
+
+
+## Prometheus Variable
+prometheus_container_name: "prometheus"
+prometheus_image: 
+prometheus_tag: 
+prometheus_port:
+  - "9090:9090"
+prometheus_volumes:
+  - "./prometheus.yaml:/etc/prometheus/prometheus.yml"
+
+## Grafana Variable
+grafana_container_name: "grafana"
+grafana_image: 
+grafana_tag: 
+grafana_port:
+  - "3000:3000"
+
+## Node_exporter Variable
+node_exporter_container_name: "node_exporter"
+node_exporter_image: 
+node_exporter_tag:
+node_exporter_volumes:
+  - "/:/host:ro"
+node_exporter_port:
+  - "9100:9100"
+
+## cadvisor Variable
+cadvisor_container_name: "cadvisor"
+cadvisor_image: gcr.io/cadvisor/cadvisor
+cadvisor_tag:
+cadvisor_volumes:
+  - "/:/rootfs:ro"
+  - "/var/run:/var/run:rw"
+  - "/sys:/sys:ro"
+  - "/var/lib/docker/:/var/lib/docker:ro"
+cadvisor_port:
+  - "8080:8080"
+>>>>>>> 704621d29855a07487b561d2eb98907934e31de8

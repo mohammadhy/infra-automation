@@ -1,0 +1,23 @@
+services:
+  {{ node_exporter_container_name }}:
+    image: "{{ node_exporter_image }}:{{ node_exporter_tag }}"
+    container_name: "{{ node_exporter_container_name }}"
+    restart: "on-failure"
+    ports:
+{% for port in node_exporter_port %}
+    - "{{ port }}"
+{% endfor %}
+    volumes:
+{% for volume in node_exporter_volumes %}
+    - {{ volume }}
+{% endfor %}
+    deploy:
+      resources:
+        limits:
+          cpus: "{{ node_exporter_cpu | default(DEFAULT_CPU_LIMIT) }}"
+          memory: "{{ node_exporter_memory | default(DEFAULT_MEMOEY_LIMIT) }}"
+    networks:
+      - shared_network
+networks:
+  shared_network:
+    external: true

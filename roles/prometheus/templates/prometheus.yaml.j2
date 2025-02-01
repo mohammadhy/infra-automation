@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+scrape_configs:
+  - job_name: 'docker'
+    static_configs:
+    - targets: ["{{ cadvisor_container_name }}:8080"]
+
+  - job_name: 'Node'
+    static_configs:
+    - targets: ["{{ node_exporter_container_name }}:9100"]
