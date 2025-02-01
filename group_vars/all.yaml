@@ -126,8 +126,7 @@ logstash_environment:
 logstash_cpu: "0.5"
 logstash_memory: "1g"
 logstash_state: "started"
-<<<<<<< HEAD
-logstash_server: "192.168.1.105"
+logstash_server: "192.168.4.215"
 
 
 ## Vault Variable 
@@ -149,8 +148,6 @@ vault_environment:
   VAULT_ADDRESS: "https://192.168.1.105:8200"
 
 VAULT_CLUSTER_ADDR: 192.168.1.105
-=======
-logstash_server: "192.168.4.215"
 
 
 ## Prometheus Variable
@@ -189,4 +186,3 @@ cadvisor_volumes:
   - "/var/lib/docker/:/var/lib/docker:ro"
 cadvisor_port:
   - "8080:8080"
->>>>>>> 704621d29855a07487b561d2eb98907934e31de8
