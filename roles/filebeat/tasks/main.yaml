@@ -8,7 +8,7 @@
 - name: "Render configuration file from template"
   template:
     src: "filebeat.yaml.j2"
-    dest: "/opt/filebeat/{{ filebeat_container_name }}"
+    dest: "/opt/filebeat/{{ filebeat_container_name }}.yaml"
     mode: '0644'
 
 - name: Generate docker-compose.yaml from template
@@ -17,7 +17,7 @@
     dest: "/opt/filebeat/docker-compose.yaml"
 
 - name: Set permissions for Filebeats 
-  command: chown -R root /opt/filebeat/{{ filebeat_container_name }}
+  command: chown -R root /opt/filebeat/{{ filebeat_container_name }}.yaml
 
     #- name: Set permissions for Docker volume
     # command: chown -R '{{ GLOBAL_USERSYS }}':'{{ GLOBAL_GROUPSYS }}' '{{ item }}'

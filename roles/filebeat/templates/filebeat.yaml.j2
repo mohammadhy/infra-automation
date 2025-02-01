@@ -7,8 +7,9 @@ filebeat.inputs:
 #  hosts: {{ filebeat_config.elastic_url }}
 #  username: {{ filebeat_config.elastic_username }}
 #  password: {{ filebeat_config.elastic_password }}
+
 output.logstash:
-  hosts: ["192.168.4.198:5044"]
+  hosts: ["{{ logstash_server }}:5044"]
 processors:
   - add_docker_metadata:
       host: "unix:///var/run/docker.sock"

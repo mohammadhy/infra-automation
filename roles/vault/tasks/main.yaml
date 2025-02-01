@@ -1,0 +1,53 @@
+---
+- name: Ensure Directory Exists
+  file:
+    path: /opt/{{ vault_container_name }}/{{ item }}
+    state: directory
+    mode: '0755'
+  loop:
+    - ""
+    - certs
+
+- name: Generate Private Key
+  community.crypto.openssl_privatekey:
+    path: "/opt/{{ vault_container_name }}/certs/server-key.key"
+    size: 4096
+    type: RSA
+
+- name: Generate Certificate Signing Request (CSR)
+  community.crypto.openssl_csr:
+    path: "/opt/{{ vault_container_name }}/certs/server-key.csr"
+    privatekey_path: "/opt/{{ vault_container_name }}/certs/server-key.key"
+    common_name: "{{ VAULT_ADDR }}"
+
+- name: Generate Self-Signed Certificate
+  community.crypto.x509_certificate:
+    path: "/opt/{{ vault_container_name }}/certs/server-key.crt"
+    privatekey_path: "/opt/{{ vault_container_name }}/certs/server-key.key"
+    csr_path: "/opt/{{ vault_container_name }}/certs/server-key.csr"
+    provider: selfsigned
+    valid_days: 365
+
+- name: "Render configuration file from template"
+  template:
+    src: "config.hcl.j2"
+    dest: "/opt/vault/config.hcl"
+    mode: '0644'
+
+- name: Generate docker-compose.yaml from template
+  template:
+    src: "docker-compose.yaml.j2"
+    dest: "/opt/vault/docker-compose.yaml"
+
+    #- name: Set permissions for vault 
+    #  command: chown -R root /opt/vault/{{ vault_container_name }}.yaml
+
+    #- name: Set permissions for Docker volume
+    # command: chown -R '{{ GLOBAL_USERSYS }}':'{{ GLOBAL_GROUPSYS }}' '{{ item }}'
+    #loop: "{{ filebeat_volumes | map('regex_replace', '^(.*):.*$', '\\1') | list }}"
+
+
+- name: Run Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "/opt/{{ vault_container_name }}"
+    state: present

@@ -1,0 +1,31 @@
+version: '3'
+services:
+  vault:
+    image: "{{ vault_image }}:{{ vault_tag }}"
+    container_name: "{{ vault_container_name }}"
+    restart: "on-failure"
+    ports:
+{% for port in vault_port %}
+      - "{{ port }}"
+{% endfor %}
+    environment:
+{% for key, value in vault_environment.items() %}
+     {{ key }}: "{{ value }}"
+{% endfor %}
+    volumes:
+{% for volume in vault_volumes %}
+    - {{ volume }}
+{% endfor %}
+    deploy:
+      resources:
+        limits:
+          cpus: "{{ vault_cpu | default(DEFAULT_CPU_LIMIT) }}"
+          memory: "{{ vault_memory | default(DEFAULT_MEMORY_LIMIT) }}"
+    entrypoint: vault server -config /vault/config/config.hcl
+    cap_add:
+      - IPC_LOCK
+    networks:
+      - shared_network
+networks:
+  shared_network:
+    external: true

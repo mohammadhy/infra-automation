@@ -1,5 +1,5 @@
 ### Global Configuration
-nesus_ip_address: "192.168.4.196:5000"
+nesus_ip_address: "192.168.1.105:5000"
 GLOBAL_USERSYS: 'user'
 GLOBAL_GROUPSYS: 'user'
 GLOBAL_VOLUME_PATH: '/home/user'
@@ -81,7 +81,7 @@ kibana_container_name: "kibana"
 kibana_port:
   - "5601:5601"
 kibana_environment: 
-  ELASTICSEARCH_URL: "http://192.168.4.215:9200"
+  ELASTICSEARCH_URL: "http://192.168.1.105:9200"
   ELASTICSEARCH_USERNAME: "elastic"
   ELASTICSEARCH_PASSWORD: "asus1650"
   xpack.security.user: "elastic"
@@ -93,7 +93,7 @@ volume_file_path: "/opt/filebeat/filebeat.yaml"
 filebeat_config:
   type: log
   path: '/var/lib/docker/containers/*/*.log'
-  elastic_url: "http://192.168.4.198:9200"
+  elastic_url: "http://192.168.1.105:9200"
   elastic_username: "elastic"
   elastic_password: "asus1650"
 
@@ -126,4 +126,25 @@ logstash_environment:
 logstash_cpu: "0.5"
 logstash_memory: "1g"
 logstash_state: "started"
-logstash_server: "192.168.4.215"
+logstash_server: "192.168.1.105"
+
+
+## Vault Variable 
+vault_image: "hashicorp/vault"
+vault_tag: "1.18"
+vault_container_name: "vault"
+vault_port:
+  - "8200:8200"
+  - "8201:8201"
+vault_volumes:
+  - "./logs:/vault/logs/:rw"
+  - "./data:/vault/data/:rw"
+  - "./certs:/certs/:rw"
+  - "./file:/vault/file/:rw"
+  - "./config.hcl:/vault/config/config.hcl:rw"
+vault_environment:
+  VAULT_ADDR: "https://192.168.1.105:8200"
+  VAULT_API_ADDR: "https://192.168.1.105:8200"
+  VAULT_ADDRESS: "https://192.168.1.105:8200"
+
+VAULT_CLUSTER_ADDR: 192.168.1.105

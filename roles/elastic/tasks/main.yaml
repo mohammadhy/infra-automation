@@ -9,10 +9,10 @@
     src: "docker-compose.yaml.j2"
     dest: "/opt/{{ elastic_container_name }}/docker-compose.yaml"
 
-- name: Set permissions for Docker volume
-  command: chown -R '{{ GLOBAL_USERSYS }}':'{{ GLOBAL_GROUPSYS }}' '{{ elastic_volumes }}'
-
 - name: Run Docker Compose
   community.docker.docker_compose_v2:
     project_src: "/opt/{{ elastic_container_name }}"
     state: present
+
+- name: Set permissions for Docker volume
+  command: chown -R '{{ GLOBAL_USERSYS }}':'{{ GLOBAL_GROUPSYS }}' '{{ elastic_volumes }}'
