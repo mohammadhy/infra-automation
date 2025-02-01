@@ -13,7 +13,7 @@ services:
     volumes:
      - /var/lib/docker/containers:/var/lib/docker/containers
      - /var/run/docker.sock:/var/run/docker.sock
-     - {{ filebeat_container_name }}.yaml:/usr/share/filebeat/filebeat.yml  
+     - ./{{ filebeat_container_name }}.yaml:/usr/share/filebeat/filebeat.yml  
     deploy:
       resources:
         limits:

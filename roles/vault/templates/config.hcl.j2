@@ -14,5 +14,5 @@ listener "tcp" {
   tls_disable_client_certs = "true"
 }
 
-api_addr = "https://{{ VAULT_ADDR }}:8200"
+api_addr = "https://{{ VAULT_CLUSTER_ADDR }}:8200"
 cluster_addr = "https://{{ VAULT_CLUSTER_ADDR }}:8201"
