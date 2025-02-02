@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  {{ fluent_container_name }}:
+    image: "{{ fluent_image }}:{{ fluent_tag }}"
+    container_name: "{{ fluent_container_name }}"
+    restart: "on-failure"
+    ports:
+{% for port in fluent_port %}
+    - "{{ port }}"
+{% endfor %}
+    volumes:
+{% for volume in fluent_volumes %}
+    - {{ volume }}
+{% endfor %}
+    deploy:
+      resources:
+        limits:
+          cpus: "{{ fluent_cpu | default(DEFAULT_CPU_LIMIT) }}"
+          memory: "{{ fluent_memory | default(DEFAULT_MEMOEY_LIMIT) }}"
+    networks:
+      - shared_network
+networks:
+  shared_network:
+    external: true

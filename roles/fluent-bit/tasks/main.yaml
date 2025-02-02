@@ -1,0 +1,25 @@
+- name: Ensure Directory Exists
+  file:
+    path: /opt/{{ fluent_container_name }}
+    state: directory
+    mode: '0755'
+
+- name: Generate docker-compose.yaml from template
+  template:
+    src: "docker-compose.yaml.j2"
+    dest: "/opt/fluent/docker-compose.yaml"
+
+- name: Copy Configuration File
+  template:
+    src: "fluent-bit.conf.j2"
+    dest: "/opt/{{ fluent_container_name }}"
+
+- name: Copy Configuration File
+  copy:
+    src: "parsers.conf"
+    dest: "/opt/{{ fluent_container_name }}"
+
+- name: Run Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "/opt/{{ fluent_container_name }}"
+    state: present

@@ -149,7 +149,6 @@ vault_environment:
 
 VAULT_CLUSTER_ADDR: 192.168.1.105
 
-
 ## Prometheus Variable
 prometheus_container_name: "prometheus"
 prometheus_image: 
@@ -186,3 +185,24 @@ cadvisor_volumes:
   - "/var/lib/docker/:/var/lib/docker:ro"
 cadvisor_port:
   - "8080:8080"
+
+
+
+## Fluent-bit Variable
+fluent_container_name: "fluentbit"
+fluent_image: fluent/fluent-bit
+fluent_tag: "latest"
+fluent_volumes:
+  - "./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf"
+  - "./parsers.conf:/fluent-bit/conf/parsers.conf"
+fluent_port:
+  - "2020:2020"
+  - "24224:24224"
+  - "24224:24224/udp"
+
+## Fluent-bit Configuration
+fluent_input: "cpu"
+fluent_tag: "cpu"
+fluent_output: "es"
+fluent_match: "*"
+fluent_elastic_index: "test-index"

@@ -1,0 +1,12 @@
+[INPUT]
+    Name  {{ fluent_input }}
+    Tag   {{ fluent_tag }}
+
+[OUTPUT]
+    Name  {{ fluent_output }}
+    Match {{ fluent_match }}
+    HTTP_User {{ elastic_username }}
+    HTTP_Passwd {{ elastic_password }}
+    Host  {{ elastic_url }}
+    Port  9200
+    Index {{ fluent_elastic_index }}
