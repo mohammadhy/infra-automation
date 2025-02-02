@@ -1,12 +1,11 @@
 [INPUT]
-    Name  {{ fluent_input }}
-    Tag   {{ fluent_tag }}
+    Name  {{ fluent_config.input }}
 
 [OUTPUT]
-    Name  {{ fluent_output }}
-    Match {{ fluent_match }}
-    HTTP_User {{ elastic_username }}
-    HTTP_Passwd {{ elastic_password }}
-    Host  {{ elastic_url }}
+    Name  {{ fluent_config.output }}
+    Match {{ fluent_config.match }}
+    HTTP_User {{ fluent_config.elastic_username }}
+    HTTP_Passwd {{ fluent_config.elastic_password }}
+    Host  {{ fluent_config.elastic_url }}
     Port  9200
     Index {{ fluent_elastic_index }}

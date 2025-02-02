@@ -7,12 +7,12 @@
 - name: Generate docker-compose.yaml from template
   template:
     src: "docker-compose.yaml.j2"
-    dest: "/opt/fluent/docker-compose.yaml"
+    dest: "/opt/{{ fluent_container_name }}/docker-compose.yaml"
 
 - name: Copy Configuration File
   template:
     src: "fluent-bit.conf.j2"
-    dest: "/opt/{{ fluent_container_name }}"
+    dest: "/opt/{{ fluent_container_name }}/fluent-bit.conf"
 
 - name: Copy Configuration File
   copy:

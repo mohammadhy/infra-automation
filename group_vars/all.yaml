@@ -201,8 +201,11 @@ fluent_port:
   - "24224:24224/udp"
 
 ## Fluent-bit Configuration
-fluent_input: "cpu"
-fluent_tag: "cpu"
-fluent_output: "es"
-fluent_match: "*"
-fluent_elastic_index: "test-index"
+fluent_config:
+  input: "docker_events"
+  output: "es"
+  match: "*"
+  elastic_url: "192.168.1.112"
+  elastic_username: "elastic"
+  elastic_password: "asus1650"
+  elastic_index: "test-index"
