@@ -1,11 +1,21 @@
+[SERVICE]
+    Parsers_File /fluent-bit/conf/parsers.conf
 [INPUT]
-    Name  {{ fluent_config.input }}
-
+    Name  {{ fluent_config.input.name }}
+    Parser {{ fluent_config.input.parser }}
+{% if fluent_config.filter.enable %}
+[FILTER]
+    Name {{ fluent_config.filter.name }}
+    Match {{ fluent_config.filter.match }}
+    Parser {{ fluent_config.filter.parser }}
+    Reserve_Data {{ fluent_config.filter.reverse_data }}
+    Key_Name {{ fluent_config.filter.key_name }}
+{% endif %}
 [OUTPUT]
-    Name  {{ fluent_config.output }}
-    Match {{ fluent_config.match }}
-    HTTP_User {{ fluent_config.elastic_username }}
-    HTTP_Passwd {{ fluent_config.elastic_password }}
-    Host  {{ fluent_config.elastic_url }}
+    Name  {{ fluent_config.output.name }}
+    Match {{ fluent_config.output.match }}
+    HTTP_User {{ fluent_config.output.elastic_username }}
+    HTTP_Passwd {{ fluent_config.output.elastic_password }}
+    Host  {{ fluent_config.output.elastic_url }}
     Port  9200
-    Index {{ fluent_elastic_index }}
+    Index {{ fluent_config.output.elastic_index }}

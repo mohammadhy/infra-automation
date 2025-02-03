@@ -195,6 +195,7 @@ fluent_tag: "latest"
 fluent_volumes:
   - "./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf"
   - "./parsers.conf:/fluent-bit/conf/parsers.conf"
+  - "/var/run/docker.sock:/var/run/docker.sock"
 fluent_port:
   - "2020:2020"
   - "24224:24224"
@@ -202,10 +203,20 @@ fluent_port:
 
 ## Fluent-bit Configuration
 fluent_config:
-  input: "docker_events"
-  output: "es"
-  match: "*"
-  elastic_url: "192.168.1.112"
-  elastic_username: "elastic"
-  elastic_password: "asus1650"
-  elastic_index: "test-index"
+  input: 
+    name: "docker_events"
+    parser: "docker"
+  filter:
+    enable: False
+    name: "parser"
+    match: "*"
+    parser: "nginx"
+    reserve_data: "true"
+    key_name: "log"
+  output: 
+    name: "es"
+    match: "*"
+    elastic_url: "192.168.1.112"
+    elastic_username: "elastic"
+    elastic_password: "asus1650"
+    elastic_index: "docker-events"
