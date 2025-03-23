@@ -23,8 +23,14 @@
     # command: chown -R '{{ GLOBAL_USERSYS }}':'{{ GLOBAL_GROUPSYS }}' '{{ item }}'
     #loop: "{{ filebeat_volumes | map('regex_replace', '^(.*):.*$', '\\1') | list }}"
 
-
 - name: Run Docker Compose
   community.docker.docker_compose_v2:
     project_src: "/opt/{{ filebeat_container_name }}"
     state: present
+
+- name: Down Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "/opt/{{ filebeat_container_name }}"
+    state: absent
+  tags:
+    - down

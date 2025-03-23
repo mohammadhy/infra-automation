@@ -2,7 +2,7 @@
 nesus_ip_address: "192.168.1.105:5000"
 GLOBAL_USERSYS: 'user'
 GLOBAL_GROUPSYS: 'user'
-GLOBAL_VOLUME_PATH: '/home/user'
+GLOBAL_VOLUME_PATH: '$HOME'
 GITLAB_URL: '192.168.4.215'
 
 ## Nexus Variable
@@ -13,7 +13,7 @@ nexus_port:
   - "8081:8081"
   - "5000:5000"
 nexus_volumes:
-  - "/home/user/nexus-data:/nexus-data"
+  - "$HOME/nexus-data:/nexus-data"
 nexus_state: "started"
 
 
@@ -24,8 +24,8 @@ sonar_container_name: "sonarqube"
 sonar_port: 
   - "9000:9000"
 sonar_volumes:
-  - "/home/user/sonar-data:/opt/sonarqube/data"
-  - "/home/user/sonar-extention:/opt/sonarqube/extensions"
+  - "$HOME/sonar-data:/opt/sonarqube/data"
+  - "$HOME/sonar-extention:/opt/sonarqube/extensions"
 sonar_state: "started"
 
 
@@ -34,9 +34,9 @@ docker_image: "docker"
 docker_tag: "dind"
 docker_container_name: "docker"
 docker_volumes:
-  - "/home/user/docker_data:/var/lib/docker"
-  - "/home/user/docker_certs:/certs"
-  - "/home/user/docker_certs_client:/certs/client"
+  - "$HOME/docker_data:/var/lib/docker"
+  - "$HOME/docker_certs:/certs"
+  - "$HOME/docker_certs_client:/certs/client"
 docker_state: "absent"
 
 
@@ -50,8 +50,8 @@ jenkins_environment:
   DOCKER_HOST: "tcp://docker:2376"
   DOCKER_TLS_VERIFY: "1"
 jenkins_volumes:
-  - "/home/user/docker_certs_client:/var/jenkins_home/.docker"
-  - "/home/user/jenkins_data:/var/jenkins_home:rw"
+  - "$HOME/docker_certs_client:/var/jenkins_home/.docker"
+  - "$HOME/jenkins_data:/var/jenkins_home:rw"
 jenkins_state: "absent"
 
 ## Elasticseach Variable
@@ -69,7 +69,7 @@ elastic_environment:
   ELASTIC_PASSWORD: "asus1650"
   ES_JAVA_OPTS: "-Xms512m -Xmx512m"
 
-elastic_volumes: "/home/user/elasticsearch_data"
+elastic_volumes: "$HOME/elasticsearch_data"
 elastic_state: "started"
 default_cpu_limit_elastic: "2"
 default_memory_limit_elastic: "1g"
@@ -152,7 +152,7 @@ VAULT_CLUSTER_ADDR: 192.168.1.105
 ## Prometheus Variable
 prometheus_container_name: "prometheus"
 prometheus_image: 
-prometheus_tag: 
+prometheus_tag: ""
 prometheus_port:
   - "9090:9090"
 prometheus_volumes:
@@ -161,14 +161,14 @@ prometheus_volumes:
 ## Grafana Variable
 grafana_container_name: "grafana"
 grafana_image: 
-grafana_tag: 
+grafana_tag: ""
 grafana_port:
   - "3000:3000"
 
 ## Node_exporter Variable
 node_exporter_container_name: "node_exporter"
 node_exporter_image: 
-node_exporter_tag:
+node_exporter_tag: ""
 node_exporter_volumes:
   - "/:/host:ro"
 node_exporter_port:
@@ -177,7 +177,7 @@ node_exporter_port:
 ## cadvisor Variable
 cadvisor_container_name: "cadvisor"
 cadvisor_image: gcr.io/cadvisor/cadvisor
-cadvisor_tag:
+cadvisor_tag: ""
 cadvisor_volumes:
   - "/:/rootfs:ro"
   - "/var/run:/var/run:rw"
