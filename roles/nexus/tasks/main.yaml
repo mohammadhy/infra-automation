@@ -17,3 +17,10 @@
 - name: Set permissions for Docker volume
   command: chown -R 200 '{{ item }}'
   loop: "{{ nexus_volumes | map('regex_replace', '^(.*):.*$', '\\1') | list }}"
+
+- name: Down Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "/opt/{{ nexus_container_name }}"
+    state: absent
+  tags:
+    - down

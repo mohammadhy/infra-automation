@@ -16,3 +16,10 @@
 
 - name: Set permissions for Docker volume
   command: chown -R '{{ GLOBAL_USERSYS }}':'{{ GLOBAL_GROUPSYS }}' '{{ elastic_volumes }}'
+
+- name: Down Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "/opt/{{ elastic_container_name }}"
+    state: absent
+  tags:
+    - down
