@@ -2,18 +2,18 @@
 nesus_ip_address: "192.168.1.105:5000"
 GLOBAL_USERSYS: 'user'
 GLOBAL_GROUPSYS: 'user'
-GLOBAL_VOLUME_PATH: '$HOME'
+GLOBAL_VOLUME_PATH: '/home/user'
 GITLAB_URL: '192.168.4.215'
 
 ## Nexus Variable
 nexus_image: "sonatype/nexus3"
 nexus_tag: "latest"
 nexus_container_name: "nexus"
-nexus_port: 
+nexus_port:
   - "8081:8081"
   - "5000:5000"
 nexus_volumes:
-  - "$HOME/nexus-data:/nexus-data"
+  - "{{ GLOBAL_VOLUME_PATH }}/nexus-data:/nexus-data"
 nexus_state: "started"
 
 
@@ -21,11 +21,11 @@ nexus_state: "started"
 sonar_image: "sonarqube"
 sonar_tag: "10.7.0-community"
 sonar_container_name: "sonarqube"
-sonar_port: 
+sonar_port:
   - "9000:9000"
 sonar_volumes:
-  - "$HOME/sonar-data:/opt/sonarqube/data"
-  - "$HOME/sonar-extention:/opt/sonarqube/extensions"
+  - "{{ GLOBAL_VOLUME_PATH }}/sonar-data:/opt/sonarqube/data"
+  - "{{ GLOBAL_VOLUME_PATH }}/sonar-extention:/opt/sonarqube/extensions"
 sonar_state: "started"
 
 
@@ -34,24 +34,24 @@ docker_image: "docker"
 docker_tag: "dind"
 docker_container_name: "docker"
 docker_volumes:
-  - "$HOME/docker_data:/var/lib/docker"
-  - "$HOME/docker_certs:/certs"
-  - "$HOME/docker_certs_client:/certs/client"
+  - "{{ GLOBAL_VOLUME_PATH }}/docker_data:/var/lib/docker"
+  - "{{ GLOBAL_VOLUME_PATH }}/docker_certs:/certs"
+  - "{{ GLOBAL_VOLUME_PATH }}/docker_certs_client:/certs/client"
 docker_state: "absent"
 
 
-## Jenkins Variable 
+## Jenkins Variable
 jenkins_image: "asusvivobook/jenkins"
 jenkins_tag: "0.0.1"
 jenkins_container_name: "jenkins"
 jenkins_port:
   - "8080:8080"
-jenkins_environment: 
+jenkins_environment:
   DOCKER_HOST: "tcp://docker:2376"
   DOCKER_TLS_VERIFY: "1"
 jenkins_volumes:
-  - "$HOME/docker_certs_client:/var/jenkins_home/.docker"
-  - "$HOME/jenkins_data:/var/jenkins_home:rw"
+  - "{{ GLOBAL_VOLUME_PATH }}/docker_certs_client:/var/jenkins_home/.docker"
+  - "{{ GLOBAL_VOLUME_PATH }}/jenkins_data:/var/jenkins_home:rw"
 jenkins_state: "absent"
 
 ## Elasticseach Variable
@@ -61,7 +61,7 @@ elastic_container_name: "elasticsearch"
 elastic_port:
   - "9200:9200"
   - "9300:9300"
-elastic_environment: 
+elastic_environment:
   cluster.name: "elastic-local"
   bootstrap.memory_lock: "true"
   discovery.type: "single-node"
@@ -69,7 +69,7 @@ elastic_environment:
   ELASTIC_PASSWORD: "asus1650"
   ES_JAVA_OPTS: "-Xms512m -Xmx512m"
 
-elastic_volumes: "$HOME/elasticsearch_data"
+elastic_volumes: "{{ GLOBAL_VOLUME_PATH }}/elasticsearch_data"
 elastic_state: "started"
 default_cpu_limit_elastic: "2"
 default_memory_limit_elastic: "1g"
@@ -80,7 +80,7 @@ kibana_tag: "7.16.3"
 kibana_container_name: "kibana"
 kibana_port:
   - "5601:5601"
-kibana_environment: 
+kibana_environment:
   ELASTICSEARCH_URL: "http://192.168.1.105:9200"
   ELASTICSEARCH_USERNAME: "elastic"
   ELASTICSEARCH_PASSWORD: "asus1650"
@@ -129,7 +129,7 @@ logstash_state: "started"
 logstash_server: "192.168.4.215"
 
 
-## Vault Variable 
+## Vault Variable
 vault_image: "hashicorp/vault"
 vault_tag: "1.18"
 vault_container_name: "vault"
@@ -151,7 +151,7 @@ VAULT_CLUSTER_ADDR: 192.168.1.105
 
 ## Prometheus Variable
 prometheus_container_name: "prometheus"
-prometheus_image: 
+prometheus_image:
 prometheus_tag: ""
 prometheus_port:
   - "9090:9090"
@@ -160,14 +160,14 @@ prometheus_volumes:
 
 ## Grafana Variable
 grafana_container_name: "grafana"
-grafana_image: 
+grafana_image:
 grafana_tag: ""
 grafana_port:
   - "3000:3000"
 
 ## Node_exporter Variable
 node_exporter_container_name: "node_exporter"
-node_exporter_image: 
+node_exporter_image:
 node_exporter_tag: ""
 node_exporter_volumes:
   - "/:/host:ro"
@@ -203,7 +203,7 @@ fluent_port:
 
 ## Fluent-bit Configuration
 fluent_config:
-  input: 
+  input:
     name: "docker_events"
     parser: "docker"
   filter:
@@ -213,7 +213,7 @@ fluent_config:
     parser: "nginx"
     reserve_data: "true"
     key_name: "log"
-  output: 
+  output:
     name: "es"
     match: "*"
     elastic_url: "192.168.1.112"
