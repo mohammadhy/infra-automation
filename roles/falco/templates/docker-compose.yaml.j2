@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  falco:
+    image: "{{ falco_image }}:{{ falco_tag }}"
+    container_name: "{{ falco_container_name }}"
+    restart: "on-failure"
+    privileged: true
+    volumes:
+{% for volume in fluent_volumes %}
+    - {{ volume }}
+{% endfor %}
+    deploy:
+      resources:
+        limits:
+          cpus: "{{ falco_cpu | default(DEFAULT_CPU_LIMIT) }}"
+          memory: "{{ falco_memory | default(DEFAULT_MEMORY_LIMIT) }}"
+    networks:
+      - shared_network
+
+networks:
+  shared_network:
+    external: true

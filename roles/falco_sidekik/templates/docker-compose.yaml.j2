@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  falcosidekik:
+    image: "{{ falcosidekik_image }}:{{ falcosidekik_tag }}"
+    container_name: "{{ falcosidekik_container_name }}"
+    restart: "on-failure"
+    environment:
+{% for key, value in falcosidekik_environment.items() %}
+      {{ key }}: "{{ value }}"
+{% endfor %}
+    ports:
+{% for port in falcosidekik_port %}
+    - "{{ port }}"
+{% endfor %}
+    deploy:
+      resources:
+        limits:
+          cpus: "{{ falcosidekik_cpu | default(DEFAULT_CPU_LIMIT) }}"
+          memory: "{{ falcosidekik_memory | default(DEFAULT_MEMORY_LIMIT) }}"
+    networks:
+      - shared_network
+
+networks:
+  shared_network:
+    external: true

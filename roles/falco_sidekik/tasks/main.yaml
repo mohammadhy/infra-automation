@@ -1,0 +1,27 @@
+---
+- name: Ensure Directory Exists
+  file:
+    path: /opt/{{ falcosidekik_container_name }}
+    state: directory
+    mode: '0755'
+
+- name: Generate docker-compose.yaml from template
+  template:
+    src: "docker-compose.yaml.j2"
+    dest: "/opt/{{ falcosidekik_container_name }}/docker-compose.yaml"
+
+- name: Run Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "/opt/{{ falcosidekik_container_name }}"
+    state: present
+
+- name: Down Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "/opt/{{ falcosidekik_container_name }}"
+    state: absent
+  tags:
+    - down
+
+#- name: Set permissions for Docker volume
+# command: chown -R '{{ GLOBAL_USERSYS }}':'{{ GLOBAL_GROUPSYS }}' '{{ item }}'
+#loop: "{{ filebeat_volumes | map('regex_replace', '^(.*):.*$', '\\1') | list }}"

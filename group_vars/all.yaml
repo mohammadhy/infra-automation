@@ -220,3 +220,30 @@ fluent_config:
     elastic_username: "elastic"
     elastic_password: "asus1650"
     elastic_index: "docker-events"
+
+## Falco Configuration
+FALCO_SIDEKIK_URL: "http://"
+
+## Falco Variable
+falco_container_name: "falco"
+falco_image: falcosecurity/falco
+falco_tag: "0.40.0"
+falco_volumes:
+  - "/dev:/host/dev"
+  - "/boot:/host/boot:ro"
+  - "/lib/modules:/host/lib/modules:ro"
+  - "/usr:/host/usr:ro"
+  - "/etc:/host/etc:ro"
+  - "/proc:/host/proc:ro"
+  - "/var/run/docker.sock:/var/run/docker.sock"
+  - "./falco.yaml:/etc/falco/falco.yaml"
+  - "./falco_rules.yaml:/etc/falco/falco_rules.local.yaml"
+
+## FalcoSideKik
+falcosidekik_container_name: "falcosecurity"
+falcosidekik_image: falcosecurity/falcosidekick
+falcosidekik_tag: "2.27.0"
+falcosidekik_port:
+  - "2801:2801"
+falcosidekik_environment:
+  SLACK_WEBHOOKURL: "https://hooks.slack.com/services/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"

@@ -1,0 +1,41 @@
+---
+- name: Ensure Directory Exists
+  file:
+    path: /opt/{{ falco_container_name }}
+    state: directory
+    mode: '0755'
+
+- name: "Render configuration file from template"
+  template:
+    src: "falco.yaml.j2"
+    dest: "/opt/{{ falco_container_name }}/{{ falco_container_name }}.yaml"
+    mode: '0644'
+
+- name: Copy Configuration File
+  copy:
+    src: "{{ falco_container_name }}_rules.yaml"
+    dest: "/opt/{{ falco_container_name }}"
+
+- name: Generate docker-compose.yaml from template
+  template:
+    src: "docker-compose.yaml.j2"
+    dest: "/opt/{{ falco_container_name }}/docker-compose.yaml"
+
+- name: Set permissions for Filebeats 
+  command: chown -R {{ GLOBAL_USERSYS }}:{{ GLOBAL_GROUPSYS }} /opt/{{ falco_container_name }}/{{ falco_container_name }}.yaml
+
+- name: Run Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "/opt/{{ falco_container_name }}"
+    state: present
+
+- name: Down Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "/opt/{{ falco_container_name }}"
+    state: absent
+  tags:
+    - down
+
+#- name: Set permissions for Docker volume
+# command: chown -R '{{ GLOBAL_USERSYS }}':'{{ GLOBAL_GROUPSYS }}' '{{ item }}'
+#loop: "{{ filebeat_volumes | map('regex_replace', '^(.*):.*$', '\\1') | list }}"
